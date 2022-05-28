@@ -1,3 +1,13 @@
+// Programmer: Hannah Hendrickson
+// Assignment 1 Crossword Puzzle
+// Class: CS145 Hybrid01
+// Date: 05/27/2022
+// Purpose: Generate a functional Crossword Puzzle
+// using user String inputs or Strings from a .txt file.
+
+// Notes: +
+
+
 package HHAssignment1;
 
 import java.io.FileNotFoundException;
@@ -5,7 +15,7 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-import java.io.*;
+
 
 public class WordSearch 
 {
@@ -25,44 +35,83 @@ public class WordSearch
         throws FileNotFoundException
     {
         crossWord = new char[PUZZLE_SIZE][PUZZLE_SIZE];
-        //words = new HashSet<String>();
-        Scanner file = new Scanner("wordlist.txt");
-
-        for (int x = 0; x <= PUZZLE_SIZE; x++)
+        try
         {
-            for(int y = 0; y <= PUZZLE_SIZE; y++)
+        Scanner file = new Scanner("wordlist.txt");
+        } // end of try
+        catch (Exception FileNotFoundException)
+        {
+            System.out.println("No such file!");
+        } // end of catch
+
+        for (int x = 0; x <= PUZZLE_SIZE -1; x++)
+        {
+            for(int y = 0; y <= PUZZLE_SIZE -1; y++)
             {
                 crossWord[x][y] = 0;
             } // end of for each
         } // end of for each
 
         // populates word set with all words in file
+        /*
         while (file.hasNextLine())
         {
             words.add(file.nextLine());
+            
         } // end of while
-
+        */
 
     } // end of generate method
 
-    public static void fillPuzzle(Set<String> words)
+    public static void fillPuzzle(Set<String> words, Scanner file)
     {
-        for (int x = 0; x <= PUZZLE_SIZE; x++)
+        String word;
+        while (file.hasNextLine())
         {
-            for(int y = 0; y <= PUZZLE_SIZE; y++)
+            word = file.nextLine();
+            for (int x = 0; x <= PUZZLE_SIZE; x++)
             {
-                if (crossWord[x][y] == 0)
+                for(int y = 0; y <= PUZZLE_SIZE; y++)
                 {
-                    addHorizontal();
-                }
+                    if (crossWord[x][y] == 0)
+                    {
+                        addHorizontal(word, x, y);
+                    }
+                } // end of for each
             } // end of for each
-        } // end of for each
+        } // end of while loop
 
     } // end of fillPuzzle
 
-    public static void addHorizontal()
+    public static void addHorizontal(String word, int x, int y)
     {
+        int length = word.length();
+        boolean validPlacement = true;
+        //int tempY = y;
+        try
+        {
+            for (int i = y; i <= (y + length -1); i++)
+            {
+                if (crossWord[x][y] != 0)
+                {
+                    validPlacement = false;
+                } // end of if
+            } // end of for loop
 
+                if (validPlacement)
+                {
+                    for (int i = 0; i <= length; i++)
+                    {
+                        crossWord[x][y] = word.charAt(i);
+                        y++;
+                    } // end of for
+                } // end of if
+            
+        } // end of try
+        catch (Exception e)
+        {
+
+        } // end of catch
     } // end of addHorizontal
 
     public static void addHorizontalBackwards()

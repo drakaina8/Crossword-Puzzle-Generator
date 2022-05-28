@@ -1,10 +1,12 @@
 package HHAssignment1;
 
+import java.io.FileNotFoundException;
+
 public class TestMain
 {
-    public static void main(String[] args)
+    public static void main(String[] args) 
+        throws FileNotFoundException
     {
-        char letter = 'z';
-        System.out.println(letter);
+        WordSearch.generate();
     } // end of main method
 } // end of TestMain class
