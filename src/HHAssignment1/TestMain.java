@@ -4,7 +4,7 @@ public class TestMain
 {
     public static void main(String[] args)
     {
-        char letter;
+        char letter = 'z';
         System.out.println(letter);
     } // end of main method
 } // end of TestMain class
