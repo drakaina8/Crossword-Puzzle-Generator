@@ -8,6 +8,6 @@ public class TestMain
         throws FileNotFoundException
     {
         WordSearch.generate();
-        WordSearch.print();
+        //WordSearch.print();
     } // end of main method
 } // end of TestMain class
