@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -43,98 +44,121 @@ public class WordSearch
         ArrayList<String> words = new ArrayList<>();
         try
         {
-        File txtFile = new File ("src\\HHAssignment1\\wordlist.txt");
-        Scanner fileScan = new Scanner(txtFile);
-        while (fileScan.hasNextLine())
-        {
-            word = fileScan.nextLine();
-            words.add(word);
-        } // end of while
-        fillPuzzle(words, fileScan);
+            File txtFile = new File ("src\\HHAssignment1\\wordlist.txt");
+            Scanner fileScan = new Scanner(txtFile);
+            while (fileScan.hasNextLine())
+            {
+                word = fileScan.nextLine();
+                words.add(word);
+            } // end of while
+            
+            for (int x = 0; x <= PUZZLE_SIZE -1; x++)
+            {   
+                for(int y = 0; y <= PUZZLE_SIZE -1; y++)
+                {
+                    crossWord[x][y] = '+';
+                } // end of for each
+        } // end of for each
         } // end of try
         catch (Exception FileNotFoundException)
         {
             System.out.println("No such file!");
         } // end of catch
-
+        print();
+        fillPuzzle(words);
         //fillPuzzle(words, file);
 
     } // end of generate method
 
-    public static void fillPuzzle(ArrayList<String> words, Scanner file)
+    public static void fillPuzzle(ArrayList<String> words)
     {
-        boolean nextWord;
-        for (String word: words)
+        Iterator<String> itr = words.iterator();
+        String word;
+        while (itr.hasNext())
         {
-            nextWord = true;
+            word = itr.next();
             for (int x = 0; x <= PUZZLE_SIZE -1; x++)
             {
                 for(int y = 0; y <= PUZZLE_SIZE -1; y++)
                 {
-                    if (crossWord[x][y] == 0 && nextWord)
+                    if (Character.compare(crossWord[x][y] == 0) &&
+                        words.contains(word))
                     {
-                        addMain(words, word, x, y);
-                        words.remove(word);
-                        nextWord = false;
-                    }
+                            addMain(words, word, x, y, itr);
+                            //itr.remove();
+                            print();
+                            System.out.println();
+                            System.out.println();
+                            y += randomNumGenerator(3);
+                    } // end of if
                 } // end of for each
             } // end of for each
+            //itr.remove();
         } // end of while loop
 
     } // end of fillPuzzle
 
-    public static void addMain(ArrayList<String> words, String word, int x, int y)
+    public static void addMain(ArrayList<String> words, String word, int x, int y, Iterator<String> itr)
     {
         int rand;
-        rand = randomNumGenerator();
+        rand = randomNumGenerator(10);
                         switch(rand)
                         {
                             case 1:
-                                addHorizontal(word, x, y);
+                                addHorizontal(word, x, y, itr);
                                 break;
                             case 2:
-                                addHorizontalBackwards(word, x, y);
+                                addHorizontalBackwards(word, x, y, itr);
                                 break;
                             case 3:
-                                addVertical(word, x, y);
+                                addVertical(word, x, y, itr);
                                 break;
                             case 4:
-                                addVerticalBackwards(word, x, y);
+                                addVerticalBackwards(word, x, y, itr);
                                 break;
                             case 5:
-                                addDiagnonally(word, x, y);
+                                addDiagnonally(word, x, y, itr);
                                 break;
                             case 6:
-                                addDiagnonallyBackwards(word, x, y);
+                                addDiagnonallyBackwards(word, x, y, itr);
                                 break;
                             default:
+                                break;
 
                         } // end of switch case
     } // end of addMain method
 
 
-    public static void addHorizontal(String word, int x, int y)
+    public static void addHorizontal(String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
         boolean validPlacement = true;
         //int tempY = y;
         try
         {
+            // for the range of indexes needed to place a word
+            // each x,y pair is checked for whether it is empty/available
+            // and checked for whether the index is in bounds
             for (int i = y; i <= (y + length -1); i++)
             {
-                if (crossWord[x][y] != 0)
+                if (crossWord[x][y] != '+')
                 {
                     validPlacement = false;
                 } // end of if
+                else if (x >= PUZZLE_SIZE || y >= PUZZLE_SIZE)
+                {
+                    validPlacement = false;
+                }
             } // end of for loop
 
                 if (validPlacement)
                 {
-                    for (int i = 0; i <= length; i++)
+                    for (int i = 0; i <= length -1; i++)
                     {
                         crossWord[x][y] = word.charAt(i);
                         y++;
                     } // end of for
+                    itr.remove();
                 } // end of if
             
         } // end of try
@@ -144,28 +168,36 @@ public class WordSearch
         } // end of catch
     } // end of addHorizontal
 
-    public static void addHorizontalBackwards(String word, int x, int y)
+    public static void addHorizontalBackwards(String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
         boolean validPlacement = true;
         //int tempY = y;
         try
         {
+            // for the range of indexes needed to place a word
+            // each x,y pair is checked for whether it is empty/available
+            // and checked for whether the index is in bounds
             for (int i = y; i <= (y + length -1); i++)
             {
-                if (crossWord[x][y] != 0)
+                if (crossWord[x][y] != '+')
                 {
                     validPlacement = false;
                 } // end of if
+                else if (x >= PUZZLE_SIZE || y >= PUZZLE_SIZE)
+                {
+                    validPlacement = false;
+                }
             } // end of for loop
 
                 if (validPlacement)
                 {
-                    for (int i = length; i >= 0; i--)
+                    for (int i = length -1; i >= 0; i--)
                     {
                         crossWord[x][y] = word.charAt(i);
                         y++;
                     } // end of for
+                    itr.remove();
                 } // end of if
             
         } // end of try
@@ -175,28 +207,36 @@ public class WordSearch
         } // end of finally
     } // end of addHorizontalBackwards
 
-    public static void addVertical(String word, int x, int y)
+    public static void addVertical(String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
         boolean validPlacement = true;
         //int tempY = y;
         try
         {
+            // for the range of indexes needed to place a word
+            // each x,y pair is checked for whether it is empty/available
+            // and checked for whether the index is in bounds
             for (int i = y; i <= (y + length -1); i++)
             {
-                if (crossWord[x][y] != 0)
+                if (crossWord[x][y] != '+')
                 {
                     validPlacement = false;
                 } // end of if
+                else if (x >= PUZZLE_SIZE || y >= PUZZLE_SIZE)
+                {
+                    validPlacement = false;
+                }
             } // end of for loop
 
                 if (validPlacement)
                 {
-                    for (int i = 0; i <= length; i++)
+                    for (int i = 0; i <= length -1; i++)
                     {
                         crossWord[x][y] = word.charAt(i);
                         x++;
                     } // end of for
+                    itr.remove();
                 } // end of if
             
         } // end of try
@@ -206,28 +246,36 @@ public class WordSearch
         } // end of finally
     } // end of addVertical
 
-    public static void addVerticalBackwards(String word, int x, int y)
+    public static void addVerticalBackwards(String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
         boolean validPlacement = true;
         //int tempY = y;
         try
         {
+            // for the range of indexes needed to place a word
+            // each x,y pair is checked for whether it is empty/available
+            // and checked for whether the index is in bounds
             for (int i = y; i <= (y + length -1); i++)
             {
-                if (crossWord[x][y] != 0)
+                if (crossWord[x][y] != '+')
                 {
                     validPlacement = false;
                 } // end of if
+                else if (x >= PUZZLE_SIZE || y >= PUZZLE_SIZE)
+                {
+                    validPlacement = false;
+                }
             } // end of for loop
 
                 if (validPlacement)
                 {
-                    for (int i = length; i >= 0; i--)
+                    for (int i = length -1; i >= 0; i--)
                     {
                         crossWord[x][y] = word.charAt(i);
                         x++;
                     } // end of for
+                    itr.remove();
                 } // end of if
             
         } // end of try
@@ -237,30 +285,38 @@ public class WordSearch
         } // end of finally
     } // end of addVerticalBackwards
 
-    public static void addDiagnonally(String word, int x, int y)
+    public static void addDiagnonally(String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
         boolean validPlacement = true;
         //int tempY = y;
         try
         {
+            // for the range of indexes needed to place a word
+            // each x,y pair is checked for whether it is empty/available
+            // and checked for whether the index is in bounds
             for (int i = y; i <= (y + length -1); i++)
             {
-                if (crossWord[x][y] != 0)
+                if (crossWord[x][y] != '+')
                 {
                     validPlacement = false;
                 } // end of if
+                else if (x >= PUZZLE_SIZE -1 || y >= PUZZLE_SIZE -1)
+                {
+                    validPlacement = false;
+                }
             } // end of for loop
 
                 if (validPlacement)
                 {
-                    for (int i = 0; i <= length; i++)
+                    for (int i = 0; i <= length -1; i++)
                     {
                         crossWord[x][y] = word.charAt(i);
                         x++;
                         y++;
                         
                     } // end of for
+                    itr.remove();
                 } // end of if
             
         } // end of try
@@ -270,29 +326,37 @@ public class WordSearch
         } // end of finally
     } // end of addDiagnonally
 
-    public static void addDiagnonallyBackwards(String word, int x, int y)
+    public static void addDiagnonallyBackwards(String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
         boolean validPlacement = true;
         //int tempY = y;
         try
         {
+            // for the range of indexes needed to place a word
+            // each x,y pair is checked for whether it is empty/available
+            // and checked for whether the index is in bounds
             for (int i = y; i <= (y + length -1); i++)
             {
-                if (crossWord[x][y] != 0)
+                if (crossWord[x][y] != '+')
                 {
                     validPlacement = false;
                 } // end of if
+                else if (x >= PUZZLE_SIZE -1 || y >= PUZZLE_SIZE -1)
+                {
+                    validPlacement = false;
+                }
             } // end of for loop
 
                 if (validPlacement)
                 {
-                    for (int i = length; i >= 0; i--)
+                    for (int i = length -1; i >= 0; i--)
                     {
                         crossWord[x][y] = word.charAt(i);
                         x++;
                         y++;
                     } // end of for
+                    itr.remove();
                 } // end of if
             
         } // end of try
@@ -321,11 +385,11 @@ public class WordSearch
         
     } // end of printSolution method
 
-    private static int randomNumGenerator()
+    private static int randomNumGenerator(int bound)
     {
         int randomNum;
         Random random = new Random();
-        randomNum = random.nextInt(10) -1;
+        randomNum = random.nextInt(bound) -1;
         return randomNum;
     } // end of randomNumGenerator
 } // end of WordSearch class
