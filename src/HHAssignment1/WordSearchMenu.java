@@ -1,14 +1,23 @@
+// Programmer: Hannah Hendrickson
+// Assignment 1: Word Search Generator
+// Class: CS145 Hybrid01
+// Date: 5/31/2022
+// Purpose: Generates a word search from either
+// user word input or from pre-written text files.
+
+// Notes: The user cannot crash the program via any input.
+// .txt file paths are pre-defined.
+
 package HHAssignment1;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class WordSearchMenu 
 {
+    // introduction method, prints out a simple program intro
     public static void introduction()
     {
         System.out.printf("~Welcome to Word Search Generator!~%n%n"
@@ -16,6 +25,8 @@ public class WordSearchMenu
                         + "or you can select a text file with a pre-selected list of themed words!");
     } // end of introduction method
 
+    // mainMenu method, controls the bulk of program functions
+    // prompts user for menu choice and initiates associated methods
     public static void mainMenu() 
         throws IOException
     {
@@ -61,12 +72,16 @@ public class WordSearchMenu
                     break;
             }
         } while (userInput != 'q');
+        input.close();
     } // end of mainMenu class
 
+    // selectFile method, called for print methods
+    // user selects from a list of pre-defined file names
+    // returns the file at that path
     public static File selectFile()
     {
         Scanner input = new Scanner(System.in);
-        String fileName;
+        String filePath;
         File file = new File("");
         boolean invalidSelection = false;
         System.out.printf("Select a word list file.%n%n"
@@ -84,28 +99,28 @@ public class WordSearchMenu
             switch(userInput)
             {
                 case 'u':
-                    fileName = "UserWordSearch.txt";
-                    file = new File(fileName);
+                    filePath = "src\\HHAssignment1\\UserWordSearch.txt";
+                    file = new File(filePath);
                     invalidSelection = false;
                     break;
                 case 'c':
-                    fileName = "WAcities.txt";
-                    file = new File(fileName);
+                    filePath = "src\\HHAssignment1\\WAcities.txt";
+                    file = new File(filePath);
                     invalidSelection = false;
                     break;
                 case 'p':
-                    fileName = "PastaAndPastaDishes.txt";
-                    file = new File(fileName);
+                    filePath = "src\\HHAssignment1\\PastaAndPastaDishes.txt";
+                    file = new File(filePath);
                     invalidSelection = false;
                     break;
                 case 'd':
-                    fileName = "DogBreeds.txt";
-                    file = new File(fileName);
+                    filePath = "src\\HHAssignment1\\DogBreeds.txt";
+                    file = new File(filePath);
                     invalidSelection = false;
                     break;
                 case 'w':
-                    fileName = "WeatherPhenomenon.txt";
-                    file = new File(fileName);
+                    filePath = "src\\HHAssignment1\\WeatherPhenomenon.txt";
+                    file = new File(filePath);
                     invalidSelection = false;
                     break;
                 default:
@@ -118,30 +133,44 @@ public class WordSearchMenu
         return file;
     } // end of selectFile method
 
+    // userCreateFile method, populates UserWordSearch.txt file
     public static void userCreateFile() 
         throws IOException
     {
-        int wordCount;
+        int wordCount = 0;
         String userWord;
         Scanner input = new Scanner(System.in);
 
-        FileWriter file = new FileWriter("UserWordSearch.txt");
-        BufferedWriter writer = new BufferedWriter(file);
+        FileWriter file = new FileWriter("src\\HHAssignment1\\UserWordSearch.txt");
+        //BufferedWriter writer = new BufferedWriter(file);
 
         System.out.println("How many words would you like to enter for your word search?");
-        wordCount = input.nextInt();
-        input.nextLine();
+        while (wordCount <= 0)
+        {
+            try
+            {
+                wordCount = input.nextInt();
+                input.nextLine();
+            } // end of try
+            catch (Exception InputMismatchException)
+            {
+                System.out.printf("%n%nPlease enter a number.%n");
+            } // end of catch
+        } // end of while
+        
         System.out.printf("You may now begin entering words.%n"
                         + "Please note that words may not contain spaces "
                         + "or special characters.%n%n");
         for (int i = 1; i <= wordCount; i++)
         {
             userWord = userString(input);
-            writer.write(userWord + "\n");
+            file.write(userWord + "\n");
         } // end of for loop
+        file.close();
     } // end of userCreateFile method
 
    // userString method, intakes a single String from the user and returns it
+   // ensures the String is one word with no special characters
    public static String userString(Scanner input)
     {
         String userEntry = "";
@@ -162,7 +191,8 @@ public class WordSearchMenu
             {
                 letter = userEntry.charAt(i);
                 letterNumValue = Character.getNumericValue(letter);
-                if (letter >= 65 && letter <= 90)
+                if (letter >= 65 && letter <= 90
+                    && length <= 13)
                 {
                     invalidWord = false;
                 } // end of if

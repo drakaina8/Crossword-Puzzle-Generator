@@ -1,11 +1,10 @@
 // Programmer: Hannah Hendrickson
-// Assignment 1 Crossword Puzzle
+// Assignment 1: Word Search Generator
 // Class: CS145 Hybrid01
-// Date: 05/27/2022
-// Purpose: Generate a functional Crossword Puzzle
-// using user String inputs or Strings from a .txt file.
+// Date: 5/31/2022
+// Purpose: Generates a word search from either
+// user word input or from pre-written text files.
 
-// Notes: +
 
 
 package HHAssignment1;
@@ -22,9 +21,8 @@ public class WordSearch
 {
     private static final int PUZZLE_SIZE = 15;
 
-
-    // generate method, prompts user for the number of words to enter
-    // intakes user's words and generates a word search
+    // generate method, intakes word list file and generates a word search
+    // returns word search as 2d array
     public static char[][] generate(File txtFile)
         throws FileNotFoundException
     {
@@ -32,10 +30,12 @@ public class WordSearch
         String word;
         char[][] wordSearch = new char[PUZZLE_SIZE][PUZZLE_SIZE];
         ArrayList<String> wordList = new ArrayList<>();
+
         try
         {
-            //File txtFile = new File ("src\\HHAssignment1\\FruitsAndVeggies.txt");
             Scanner fileScan = new Scanner(txtFile);
+            // populates wordList with uppercase words
+            // from text file
             while (fileScan.hasNextLine())
             {
                 word = fileScan.nextLine();
@@ -43,6 +43,7 @@ public class WordSearch
                 wordList.add(word);
             } // end of while
             
+            // populates word search array with crosses
             for (int x = 0; x <= PUZZLE_SIZE -1; x++)
             {   
                 for(int y = 0; y <= PUZZLE_SIZE -1; y++)
@@ -55,11 +56,13 @@ public class WordSearch
         {
             System.out.println("No such file!");
         } // end of catch
+        // populates wordsearch array with words
         fillPuzzle(wordList, wordSearch);
         return wordSearch;
 
     } // end of generate method
 
+    // fillPuzzle method, populates wordsearch array by calling add methods
     public static void fillPuzzle(ArrayList<String> wordList, char[][] wordSearch)
     {
         Iterator<String> itr = wordList.iterator();
@@ -67,6 +70,7 @@ public class WordSearch
         word = itr.next();
         do
         {
+            // x and y act as coordinates to place individual letters
             for (int x = 0; x <= PUZZLE_SIZE -1; x++)
             {
                 for(int y = 0; y <= PUZZLE_SIZE -1; y++)
@@ -78,14 +82,20 @@ public class WordSearch
                     else if (wordSearch[x][y] == '+' &&
                         wordList.contains(word))
                     {
+                        // addmain will call a specific add method
+                        // this will add the word and delete it from list
                         addMain(wordSearch, word, x, y, itr);
                             
                     } // end of if
                     else if (!wordList.contains(word) &&
                              itr.hasNext())
                     {
+                        // once a word has been successfully added
+                        // the next one is generated
                         word = itr.next();
                     } // end of else if
+                    // allows some randomness so that words
+                    // are more distributed through the array
                     y += randomNumGenerator(3);
                     x += randomNumGenerator(3);
                 } // end of for each
@@ -94,6 +104,8 @@ public class WordSearch
 
     } // end of fillPuzzle
 
+    // addMain method, selects a specific add method through
+    // psuedo-random num generation
     public static void addMain(char[][] wordSearch, String word, int x, int y, Iterator<String> itr)
     {
         int rand;
@@ -127,7 +139,7 @@ public class WordSearch
                         } // end of switch case
     } // end of addMain method
 
-
+    // addHorizontal method, if possible it places a word horizontally
     public static void addHorizontal(char[][] wordSearch, String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
@@ -167,7 +179,10 @@ public class WordSearch
         } // end of catch
     } // end of addHorizontal
 
-    public static void addHorizontalBackwards(char[][] wordSearch, String word, int x, int y, Iterator<String> itr)
+    // addHorizontalBackwards method, if possible it places 
+    // a reversed word horizontally 
+    public static void addHorizontalBackwards(char[][] wordSearch, 
+        String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
         boolean validPlacement = true;
@@ -206,6 +221,7 @@ public class WordSearch
         } // end of finally
     } // end of addHorizontalBackwards
 
+    // addVertical method, if possible it places a word vertically
     public static void addVertical(char[][] wordSearch, String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
@@ -244,6 +260,7 @@ public class WordSearch
         } // end of finally
     } // end of addVertical
 
+    // addVertical method, if possible it places a reversed word vertically
     public static void addVerticalBackwards(char[][] wordSearch, String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
@@ -283,6 +300,7 @@ public class WordSearch
         } // end of finally
     } // end of addVerticalBackwards
 
+    // addDiagonally method, if possible it places a word diagonally
     public static void addDiagnonally(char[][] wordSearch, String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
@@ -325,7 +343,9 @@ public class WordSearch
         } // end of finally
     } // end of addDiagnonally
 
-    public static void addDiagnonallyBackwards(char[][] wordSearch, String word, int x, int y, Iterator<String> itr)
+    // addDiagonallyBackwards method, if possible it places a reversed word vertically
+    public static void addDiagnonallyBackwards(char[][] wordSearch, 
+        String word, int x, int y, Iterator<String> itr)
     {
         int length = word.length();
         boolean validPlacement = true;
@@ -376,11 +396,14 @@ public class WordSearch
             {
                 if (wordSearch[x][y] == '+')
                 {
+                    // prints out a random capital letter
+                    // for each non-word space
                     randChar = (char)(randomNumGenerator(25) + 65);
                     System.out.print(randChar + " ");
                 } // end of if
                 else
                 {
+                    // prints the letter of a word
                     System.out.print(wordSearch[x][y] + " ");
                 } // end of else
             } // end of for each
@@ -397,10 +420,13 @@ public class WordSearch
             {
                 if (wordSearch[x][y] == '+')
                 {
+                    // prints out a capital X
+                    // for each non-word space
                     System.out.print("X" + " ");
                 } // end of if
                 else
                 {
+                    // prints out a letter in a word
                     System.out.print(wordSearch[x][y] + " ");
                 } // end of else
             } // end of for each
@@ -408,6 +434,7 @@ public class WordSearch
         } // end of for each
     } // end of printSolution method
 
+    // randomNumGenerator method, returns an int of 1 - bound
     public static int randomNumGenerator(int bound)
     {
         int randomNum;
