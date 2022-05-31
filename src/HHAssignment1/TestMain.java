@@ -8,6 +8,12 @@ public class TestMain
         throws FileNotFoundException
     {
         WordSearch.generate();
-        //WordSearch.print();
+        
+        /*
+        for (int i = 0; i <= 20; i++)
+        {
+            System.out.println(WordSearch.randomNumGenerator(10));
+        }
+        */
     } // end of main method
 } // end of TestMain class
