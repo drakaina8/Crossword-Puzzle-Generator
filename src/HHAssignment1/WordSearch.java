@@ -21,18 +21,11 @@ import java.util.Scanner;
 public class WordSearch 
 {
     private static final int PUZZLE_SIZE = 15;
-    //private static Set<String> words;
-    //private static char[][] crossWord;
-    // printIntro method, prints introductions to the program
-    public static void printIntro()
-    {
-        System.out.println("Welcome to CrossWord Puzzles!");
-        System.out.println();
-    } // end of printIntro method
+
 
     // generate method, prompts user for the number of words to enter
     // intakes user's words and generates a word search
-    public static void generate()
+    public static char[][] generate(File txtFile)
         throws FileNotFoundException
     {
         //Scanner file = new Scanner("wordlist.txt");
@@ -41,7 +34,7 @@ public class WordSearch
         ArrayList<String> wordList = new ArrayList<>();
         try
         {
-            File txtFile = new File ("src\\HHAssignment1\\FruitsAndVeggies.txt");
+            //File txtFile = new File ("src\\HHAssignment1\\FruitsAndVeggies.txt");
             Scanner fileScan = new Scanner(txtFile);
             while (fileScan.hasNextLine())
             {
@@ -63,10 +56,7 @@ public class WordSearch
             System.out.println("No such file!");
         } // end of catch
         fillPuzzle(wordList, wordSearch);
-        printPuzzle(wordSearch);
-        System.out.println();
-        System.out.println();
-        printSolution(wordSearch);
+        return wordSearch;
 
     } // end of generate method
 
