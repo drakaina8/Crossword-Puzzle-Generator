@@ -5,6 +5,7 @@
 // Purpose: Generates a word search from either
 // user word input or from pre-written text files.
 
+// Notes: 
 
 
 package HHAssignment1;
@@ -109,28 +110,25 @@ public class WordSearch
     public static void addMain(char[][] wordSearch, String word, int x, int y, Iterator<String> itr)
     {
         int rand;
-        rand = randomNumGenerator(9);
+        rand = randomNumGenerator(6);
                         switch(rand)
                         {
                             case 1:
-                            case 2:
                                 addHorizontal(wordSearch, word, x, y, itr);
                                 break;
-                            case 3:
+                            case 2:
                                 addHorizontalBackwards(wordSearch, word, x, y, itr);
                                 break;
-                            case 4:
-                            case 5:
+                            case 3:
                                 addVertical(wordSearch, word, x, y, itr);
                                 break;
-                            case 6:
+                            case 4:
                                 addVerticalBackwards(wordSearch, word, x, y, itr);
                                 break;
-                            case 7:
-                            case 8:
+                            case 5:
                                 addDiagnonally(wordSearch, word, x, y, itr);
                                 break;
-                            case 9:
+                            case 6:
                                 addDiagnonallyBackwards(wordSearch, word, x, y, itr);
                                 break;
                             default:
@@ -422,7 +420,7 @@ public class WordSearch
                 {
                     // prints out a capital X
                     // for each non-word space
-                    System.out.print("X" + " ");
+                    System.out.print("  ");
                 } // end of if
                 else
                 {

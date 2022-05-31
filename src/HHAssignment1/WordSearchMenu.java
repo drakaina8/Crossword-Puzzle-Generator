@@ -35,40 +35,38 @@ public class WordSearchMenu
         File file;
         char[][] wordSearch;
         char userInput;
-        System.out.printf("Please make a selection:%n"
+        do
+        {
+        System.out.printf("%n%nPlease make a selection:%n"
                         + "|g| Generate a new word search%n"
                         + "|p| Print a word search%n"
                         + "|s| Print the solution to a word search%n"
                         + "|q| Quit the program%n%n");
-        do
-        {
+     
             System.out.println("Type the corresponding letter of your menu choice.");
             userInput = input.nextLine().charAt(0);
+            System.out.printf("%n%n");
+
             switch (userInput)
             {
                 case 'g':
                     userCreateFile();
-                    //validSelection = true;
                     break;
                 case 'p':
                     file = selectFile();
                     wordSearch = WordSearch.generate(file);
                     WordSearch.printPuzzle(wordSearch);
-                    //validSelection = true;
                     break;
                 case 's':
                     file = selectFile();
                     wordSearch = WordSearch.generate(file);
                     WordSearch.printSolution(wordSearch);
-                    //validSelection = true;
                     break;
                 case 'q':
                     System.out.printf("%n%nEnding the program.");
-                    //validSelection = true;
                     break;
                 default:
                     System.out.printf("%n%nInvalid selection.%n%n");
-                    //validSelection = false;
                     break;
             }
         } while (userInput != 'q');
