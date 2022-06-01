@@ -5,6 +5,13 @@
 // Purpose: Generates a word search from either
 // user word input or from pre-written text files.
 
+// Notes: I didn't add any word overlapping.
+// Words are guaranteed not be be lost or skipped over.
+// It is possible that the program could hit an infinite loop
+// if there is no valid placement for a word.
+
+// Warning: There may be issues with the files being recognized 
+// if there's no src folder above the package. 
 
 package HHAssignment1;
 

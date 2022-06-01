@@ -140,7 +140,6 @@ public class WordSearchMenu
         Scanner input = new Scanner(System.in);
 
         FileWriter file = new FileWriter("src\\HHAssignment1\\UserWordSearch.txt");
-        //BufferedWriter writer = new BufferedWriter(file);
 
         System.out.println("How many words would you like to enter for your word search?");
         while (wordCount <= 0)
@@ -159,6 +158,7 @@ public class WordSearchMenu
         System.out.printf("You may now begin entering words.%n"
                         + "Please note that words may not contain spaces "
                         + "or special characters.%n%n");
+        // intakes user's words and prints them to file
         for (int i = 1; i <= wordCount; i++)
         {
             userWord = userString(input);
@@ -174,8 +174,7 @@ public class WordSearchMenu
         String userEntry = "";
         int length;
         char letter;
-        int letterNumValue;
-        boolean invalidWord = false;
+        boolean invalidWord = true;
         do
         {
             System.out.println("Type a word. ");
@@ -188,18 +187,31 @@ public class WordSearchMenu
             for (int i = 0; i <= length -1; i++)
             {
                 letter = userEntry.charAt(i);
-                letterNumValue = Character.getNumericValue(letter);
-                if (letter >= 65 && letter <= 90
-                    && length <= 13)
+                if (letter >= 'A' && letter <= 'Z')
+                {
+                    invalidWord = false;
+                } // end of if
+                // checks if word length is within bounds
+                if (invalidWord == false && length <= 13)
                 {
                     invalidWord = false;
                 } // end of if
                 else
                 {
                     invalidWord = true;
+                    break;
+                } // end of else
+                // checks if word has a space
+                if(letter == ' ')
+                {
+                    invalidWord = true;
+                    break;
+                } // end of if
+                if (invalidWord)
+                {
                     System.out.printf("%nPlease reenter your word without "
                                     + "spaces or special characters.%n%n");
-                } // end of else
+                } // end of if
             } // end of for
 
         } while (userEntry.equals("") || invalidWord);

@@ -5,7 +5,6 @@
 // Purpose: Generates a word search from either
 // user word input or from pre-written text files.
 
-// Notes: 
 
 
 package HHAssignment1;
